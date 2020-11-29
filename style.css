@@ -1,0 +1,43 @@
+@charset "utf-8";
+body {
+    background-image: url('background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-left: 320px;
+    margin-right: 320px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    font-family:  cursive;
+}
+
+li a {
+    padding: 10px;
+    background: rgba(255,255,255,0.5);
+}
+
+table,th,td
+{
+    margin-top:20px;
+    padding:15px;
+}
+
+/*.intro-text {*/
+/*	padding-bottom: 50px;*/
+/*}*/
+/*	*/
+/*.program-table {*/
+/*	width: 1000px;*/
+/*	border:2px solid black;*/
+/*}*/
+
+.form-table {
+    margin-top:0px;
+}
+
+.error-HTML {
+    color: red;
+}
+
+/*.navbar li {*/
+/*	display: inline;*/
+/*}*/
