@@ -189,3 +189,26 @@ function validDataInfo() {
 		return true;
 	}
 }
+
+function validPatientInfo() {
+	if (!(validFirstName() && validLastName() && validDOB() && validGender())) {
+		alert("Please fix any errors in your provided information before the new subject can be added.");
+		return false;
+	} else {
+		return true;
+	}
+}
+
+function validGender()
+{
+	var gender = document.getElementById('patientGender');
+	console.log("gender is "+gender.value);
+	if (gender.value === 'm' || gender.value === 'f') {
+		document.getElementById('genderError').innerHTML = '';
+		return true;
+	} else {
+		document.getElementById('genderError').innerHTML = 'Please make a choice for Male or Female.';
+		document.getElementById('genderError').style.color = 'red';
+		return false;
+	}
+}

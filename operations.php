@@ -5,7 +5,6 @@ function openConnection() {
     $conn = odbc_connect("project", '','' );
     return $conn;
 }
-
 function userExists($userName, $password, $conn) {
     $query = "SELECT * FROM Practitioners";
     $practitioners = odbc_exec($conn,$query);
@@ -316,5 +315,7 @@ function printPatientOptions($conn) {
         echo "<option value=\"$patientID\">$fullName</option>";
     }
 }
+
+
 
 ?>
