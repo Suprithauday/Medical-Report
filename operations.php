@@ -1,17 +1,19 @@
-
 <!--this is my operations page where all the functions are written and called when necessary-->
 <?php
-function openConnection() {
-    $conn = odbc_connect("project", '','' );
+function openConnection()
+{
+    $conn = odbc_connect("project", '', '');
     return $conn;
 }
-function userExists($userName, $password, $conn) {
-    $query = "SELECT * FROM Practitioners";
-    $practitioners = odbc_exec($conn,$query);
 
-    while(odbc_fetch_row($practitioners)) {
-        $dbUser = odbc_result($practitioners,"Username");
-        $dbPass = odbc_result($practitioners,"Password");
+function userExists($userName, $password, $conn)
+{
+    $query = "SELECT * FROM Practitioners";
+    $practitioners = odbc_exec($conn, $query);
+
+    while (odbc_fetch_row($practitioners)) {
+        $dbUser = odbc_result($practitioners, "Username");
+        $dbPass = odbc_result($practitioners, "Password");
         if ($dbUser == $userName && $dbPass == $password) {
             return true;
         }
@@ -19,12 +21,13 @@ function userExists($userName, $password, $conn) {
     return false;
 }
 
-function isAdmin($userName, $conn) {
+function isAdmin($userName, $conn)
+{
     $query = "SELECT * FROM Practitioners WHERE Administrator = true";
-    $administrators = odbc_exec($conn,$query);
+    $administrators = odbc_exec($conn, $query);
 
-    while(odbc_fetch_row($administrators)) {
-        $dbUser = odbc_result($administrators,"Username");
+    while (odbc_fetch_row($administrators)) {
+        $dbUser = odbc_result($administrators, "Username");
 
         if ($dbUser == $userName) {
             return true;
@@ -33,14 +36,16 @@ function isAdmin($userName, $conn) {
     return false;
 }
 
-function getPracID($conn, $userName) {
+function getPracID($conn, $userName)
+{
     $query = "SELECT Prac_ID from Practitioners WHERE Username = '$userName'";
-    $result = odbc_exec($conn,$query);
-    $pracID = odbc_result($result,"Prac_ID");
+    $result = odbc_exec($conn, $query);
+    $pracID = odbc_result($result, "Prac_ID");
     return $pracID;
 }
 
-function displayPatients($conn, $isAdmin, $pracID, $searchTerms) {
+function displayPatients($conn, $isAdmin, $pracID, $searchTerms)
+{
     if ($searchTerms == '') {
         if ($isAdmin) {
             $query = "SELECT * FROM Patients ORDER BY Patient_ID";
@@ -69,7 +74,7 @@ function displayPatients($conn, $isAdmin, $pracID, $searchTerms) {
 							ORDER BY s.Patient_ID";
         }
     }
-    $patients = odbc_exec($conn,$query);
+    $patients = odbc_exec($conn, $query);
     echo "<table class=\"form-table\">
 			<tr>
 				<th>Patient ID</th>
@@ -78,16 +83,16 @@ function displayPatients($conn, $isAdmin, $pracID, $searchTerms) {
 				<th>Birth Date</th>
 				<th>Gender</th>
 			</tr>";
-    while(odbc_fetch_row($patients)) {
-        $patientID = odbc_result($patients,"Patient_ID");
-        $firstName = odbc_result($patients,"FirstName");
-        $lastName = odbc_result($patients,"LastName");
-        $birthDate = substr(odbc_result($patients,"BirthDate"), 0, 10);
+    while (odbc_fetch_row($patients)) {
+        $patientID = odbc_result($patients, "Patient_ID");
+        $firstName = odbc_result($patients, "FirstName");
+        $lastName = odbc_result($patients, "LastName");
+        $birthDate = substr(odbc_result($patients, "BirthDate"), 0, 10);
         $bdYear = substr($birthDate, 0, 4);
         $bdMonth = substr($birthDate, 5, 2);
         $bdDay = substr($birthDate, 8, 2);
-        $birthDate = $bdDay."/".$bdMonth."/".$bdYear;
-        $gender = odbc_result($patients,"Gender");
+        $birthDate = $bdDay . "/" . $bdMonth . "/" . $bdYear;
+        $gender = odbc_result($patients, "Gender");
 
         echo "<tr>
 					<td>$patientID</td>
@@ -110,7 +115,8 @@ function displayPatients($conn, $isAdmin, $pracID, $searchTerms) {
     echo "</table>";
 }
 
-function displayConnections($conn, $isAdmin, $searchTerms) {
+function displayConnections($conn, $isAdmin, $searchTerms)
+{
     if ($searchTerms == '') {
         if ($isAdmin) {
             $query = "SELECT r.Rel_ID, p.Prac_ID, p.FirstName+' '+p.LastName AS Practitioner_Name, s.Patient_ID, s.FirstName +' '+s.LastName AS Patient_Name FROM Connections r, Practitioners p, Patients s
@@ -131,7 +137,7 @@ function displayConnections($conn, $isAdmin, $searchTerms) {
 							ORDER BY r.Rel_ID";
         }
     }
-    $connections = odbc_exec($conn,$query);
+    $connections = odbc_exec($conn, $query);
 
     echo "<table class=\"form-table\">
 			<tr>
@@ -141,12 +147,12 @@ function displayConnections($conn, $isAdmin, $searchTerms) {
 				<th>Patient ID</th>
 				<th>Patient Name</th>
 			</tr>";
-    while(odbc_fetch_row($connections)) {
-        $connectionID = odbc_result($connections,"Rel_ID");
-        $pracID = odbc_result($connections,"Prac_ID");
-        $pracName = odbc_result($connections,"Practitioner_Name");
-        $patientID = odbc_result($connections,"Patient_ID");
-        $patientName = odbc_result($connections,"Patient_Name");
+    while (odbc_fetch_row($connections)) {
+        $connectionID = odbc_result($connections, "Rel_ID");
+        $pracID = odbc_result($connections, "Prac_ID");
+        $pracName = odbc_result($connections, "Practitioner_Name");
+        $patientID = odbc_result($connections, "Patient_ID");
+        $patientName = odbc_result($connections, "Patient_Name");
 
         echo "<tr>
 					<td>$connectionID</td>
@@ -165,7 +171,8 @@ function displayConnections($conn, $isAdmin, $searchTerms) {
 }
 
 
-function displayPractitioners($conn, $isAdmin, $searchTerms) {
+function displayPractitioners($conn, $isAdmin, $searchTerms)
+{
     if ($searchTerms == '') {
         if ($isAdmin) {
             $query = "SELECT * FROM Practitioners";
@@ -179,7 +186,7 @@ function displayPractitioners($conn, $isAdmin, $searchTerms) {
 							OR Prac_ID LIKE '%$searchTerms%'";
         }
     }
-    $practitioners = odbc_exec($conn,$query);
+    $practitioners = odbc_exec($conn, $query);
 
     echo "<table class=\"form-table\">
 			<tr>
@@ -190,13 +197,13 @@ function displayPractitioners($conn, $isAdmin, $searchTerms) {
 				<th>Password</th>
 				<th>Administrator?</th>
 			</tr>";
-    while(odbc_fetch_row($practitioners)) {
-        $pracID = odbc_result($practitioners,"Prac_ID");
-        $firstName = odbc_result($practitioners,"FirstName");
-        $lastName = odbc_result($practitioners,"LastName");
-        $userName = odbc_result($practitioners,"Username");
-        $password = odbc_result($practitioners,"Password");
-        $administrator = odbc_result($practitioners,"Administrator");
+    while (odbc_fetch_row($practitioners)) {
+        $pracID = odbc_result($practitioners, "Prac_ID");
+        $firstName = odbc_result($practitioners, "FirstName");
+        $lastName = odbc_result($practitioners, "LastName");
+        $userName = odbc_result($practitioners, "Username");
+        $password = odbc_result($practitioners, "Password");
+        $administrator = odbc_result($practitioners, "Administrator");
 
         if ($administrator) {
             $administratorString = "Yes";
@@ -226,23 +233,24 @@ function displayPractitioners($conn, $isAdmin, $searchTerms) {
     echo "</table>";
 }
 
-function patientAlreadyExists($firstName, $lastName, $dateOfBirth, $gender, $conn) {
+function patientAlreadyExists($firstName, $lastName, $dateOfBirth, $gender, $conn)
+{
     $query = "SELECT * FROM Patients";
-    $patients = odbc_exec($conn,$query);
+    $patients = odbc_exec($conn, $query);
 
-    while(odbc_fetch_row($patients)) {
-        $dbFirst = strtolower(odbc_result($patients,"FirstName"));
-        $dbLast = strtolower(odbc_result($patients,"LastName"));
-        $dbBirthDate = strtolower(odbc_result($patients,"BirthDate"));
+    while (odbc_fetch_row($patients)) {
+        $dbFirst = strtolower(odbc_result($patients, "FirstName"));
+        $dbLast = strtolower(odbc_result($patients, "LastName"));
+        $dbBirthDate = strtolower(odbc_result($patients, "BirthDate"));
         $bdYear = substr($dbBirthDate, 0, 4);
         $bdMonth = substr($dbBirthDate, 5, 2);
         $bdDay = substr($dbBirthDate, 8, 2);
-        $dbBirthDate = $bdDay."/".$bdMonth."/".$bdYear;
-        $dbGender = odbc_result($patients,"Gender");
+        $dbBirthDate = $bdDay . "/" . $bdMonth . "/" . $bdYear;
+        $dbGender = odbc_result($patients, "Gender");
 
-        if ($dbFirst == strtolower($firstName)			&&
-            $dbLast == strtolower($lastName) 			&&
-            $dbBirthDate == strtolower($dateOfBirth)	&&
+        if ($dbFirst == strtolower($firstName) &&
+            $dbLast == strtolower($lastName) &&
+            $dbBirthDate == strtolower($dateOfBirth) &&
             $dbGender == strtolower($gender)) {
             return true;
         }
@@ -250,15 +258,16 @@ function patientAlreadyExists($firstName, $lastName, $dateOfBirth, $gender, $con
     return false;
 }
 
-function connectionAlreadyExists($practitioner, $patient, $conn) {
+function connectionAlreadyExists($practitioner, $patient, $conn)
+{
     $query = "SELECT * FROM Connections";
-    $results = odbc_exec($conn,$query);
+    $results = odbc_exec($conn, $query);
 
-    while(odbc_fetch_row($results)) {
-        $dbPractitioner = odbc_result($results,"Prac_ID");
-        $dbPatient = odbc_result($results,"Patient_ID");
+    while (odbc_fetch_row($results)) {
+        $dbPractitioner = odbc_result($results, "Prac_ID");
+        $dbPatient = odbc_result($results, "Patient_ID");
 
-        if ($dbPractitioner == $practitioner	&&
+        if ($dbPractitioner == $practitioner &&
             $dbPatient == $patient) {
 
             return true;
@@ -267,55 +276,57 @@ function connectionAlreadyExists($practitioner, $patient, $conn) {
     return false;
 }
 
-function practitionerAlreadyExists($firstName, $lastName, $userName, $conn) {
+function practitionerAlreadyExists($firstName, $lastName, $userName, $conn)
+{
     $query = "SELECT * FROM Practitioners";
-    $practitioners = odbc_exec($conn,$query);
+    $practitioners = odbc_exec($conn, $query);
 
-    while(odbc_fetch_row($practitioners)) {
-        $dbFirst = strtolower(odbc_result($practitioners,"FirstName"));
-        $dbLast = strtolower(odbc_result($practitioners,"LastName"));
-        $dbUserName = odbc_result($practitioners,"Username");
+    while (odbc_fetch_row($practitioners)) {
+        $dbFirst = strtolower(odbc_result($practitioners, "FirstName"));
+        $dbLast = strtolower(odbc_result($practitioners, "LastName"));
+        $dbUserName = odbc_result($practitioners, "Username");
 
-        if ($dbFirst == strtolower($firstName)	&&  $dbLast == strtolower($lastName) && $dbUserName == $userName) {
+        if ($dbFirst == strtolower($firstName) && $dbLast == strtolower($lastName) && $dbUserName == $userName) {
             return true;
         }
     }
     return false;
 }
 
-function getLastPatientID($conn) {
+function getLastPatientID($conn)
+{
     $query = "SELECT TOP 1 Patient_ID AS ID FROM Patients ORDER BY Patient_ID DESC";
-    $result = odbc_exec($conn,$query);
-    $lastID = odbc_result($result,"ID");
+    $result = odbc_exec($conn, $query);
+    $lastID = odbc_result($result, "ID");
     return $lastID;
 }
 
-function printPractitionerOptions($conn) {
+function printPractitionerOptions($conn)
+{
     $query = "SELECT * FROM Practitioners";
-    $practitioners = odbc_exec($conn,$query);
-    while(odbc_fetch_row($practitioners)) {
-        $pracID = odbc_result($practitioners,"Prac_ID");
-        $firstName = odbc_result($practitioners,"FirstName");
-        $lastName = odbc_result($practitioners,"LastName");
-        $fullName = $firstName." ".$lastName;
+    $practitioners = odbc_exec($conn, $query);
+    while (odbc_fetch_row($practitioners)) {
+        $pracID = odbc_result($practitioners, "Prac_ID");
+        $firstName = odbc_result($practitioners, "FirstName");
+        $lastName = odbc_result($practitioners, "LastName");
+        $fullName = $firstName . " " . $lastName;
 
         echo "<option value=\"$pracID\">$fullName</option>";
     }
 }
 
-function printPatientOptions($conn) {
+function printPatientOptions($conn)
+{
     $query = "SELECT * FROM Patients";
-    $patients = odbc_exec($conn,$query);
-    while(odbc_fetch_row($patients)) {
-        $patientID = odbc_result($patients,"Patient_ID");
-        $firstName = odbc_result($patients,"FirstName");
-        $lastName = odbc_result($patients,"LastName");
-        $fullName = $firstName." ".$lastName;
+    $patients = odbc_exec($conn, $query);
+    while (odbc_fetch_row($patients)) {
+        $patientID = odbc_result($patients, "Patient_ID");
+        $firstName = odbc_result($patients, "FirstName");
+        $lastName = odbc_result($patients, "LastName");
+        $fullName = $firstName . " " . $lastName;
 
         echo "<option value=\"$patientID\">$fullName</option>";
     }
 }
-
-
 
 ?>

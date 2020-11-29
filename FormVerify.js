@@ -79,18 +79,6 @@ function validDOB() {
 	} 
 }
 
-function validSex() {
-	var sex = document.getElementById('subjectSex');
-	console.log("sex is "+sex.value);
-	if (sex.value == 'm' || sex.value == 'f') {
-		document.getElementById('sexError').innerHTML = '';
-		return true;
-	} else {
-		document.getElementById('sexError').innerHTML = 'Please make a choice for Male or Female.';
-		document.getElementById('sexError').style.color = 'red';
-		return false;
-	} 
-}
 
 function validPractitioner() {
 	var pracID = document.getElementById('practitionerDropdown');
@@ -105,15 +93,15 @@ function validPractitioner() {
 	} 
 }
 
-function validSubject() {
-	var subjectID = document.getElementById('subjectDropdown');
-	console.log("subjectID is "+subjectID.value);
-	if (subjectID.value != '') {
-		document.getElementById('subjectError').innerHTML = '';
+function validPatient() {
+	var patientID = document.getElementById('patientDropdown');
+	console.log("patientID is "+patientID.value);
+	if (patientID.value != '') {
+		document.getElementById('patientError').innerHTML = '';
 		return true;
 	} else {
-		document.getElementById('subjectError').innerHTML = 'Please make a choice for subject.';
-		document.getElementById('subjectError').style.color = 'red';
+		document.getElementById('patientError').innerHTML = 'Please make a choice for patient.';
+		document.getElementById('patientError').style.color = 'red';
 		return false;
 	} 
 }
@@ -132,26 +120,13 @@ function validLoginInfo() {
 	}
 }
 
-// Function checks if all field checks have been satisfied. If yes, proceed. If not, deny progress, and popup with an alert message. 
-// This function is run upon pressing of the submit button.
-function validSubjectInfo() {
-	// Check that all field verification functions have returned true as success codes. If not, cause an alert popup box to appear with an error message, 
-	// and return false to prevent redirection of the page to the "successful registration page"
-	if (!(validFirstName() && validLastName() && validDOB() && validSex())) {
-		alert("Please fix any errors in your provided information before the new subject can be added.");
-		return false;
-	// If the field verification functions have all returned true, the user's input is valid and we allow him to proceed to the "successful registration page"
-	} else {
-		return true;
-	}
-}
 
 // Function checks if all field checks have been satisfied. If yes, proceed. If not, deny progress, and popup with an alert message. 
 // This function is run upon pressing of the submit button.
-function validRelationshipInfo() {
+function validConnectionInfo() {
 	// Check that all field verification functions have returned true as success codes. If not, cause an alert popup box to appear with an error message, 
 	// and return false to prevent redirection of the page to the "successful registration page"
-	if (!(validSubject() && validPractitioner())) {
+	if (!(validPatient() && validPractitioner())) {
 		alert("Please fix any errors in your provided information before we proceed with registration.");
 		return false;
 	// If the field verification functions have all returned true, the user's input is valid and we allow him to proceed to the "successful registration page"
@@ -166,7 +141,7 @@ function validPractitionerInfo() {
 	// Check that all field verification functions have returned true as success codes. If not, cause an alert popup box to appear with an error message, 
 	// and return false to prevent redirection of the page to the "successful registration page"
 	if (!(validFirstName() && validLastName() && validUsername() && validPassword())) {
-		alert("Please fix any errors in your provided information before the new subject can be added.");
+		alert("Please fix any errors in your provided information before the new patient can be added.");
 		return false;
 	// If the field verification functions have all returned true, the user's input is valid and we allow him to proceed to the "successful registration page"
 	} else {
@@ -174,25 +149,10 @@ function validPractitionerInfo() {
 	}
 }
 
-
-
-// Function checks if all field checks have been satisfied. If yes, proceed. If not, deny progress, and popup with an alert message. 
-// This function is run upon pressing of the submit button.
-function validDataInfo() {
-	// Check that all field verification functions have returned true as success codes. If not, cause an alert popup box to appear with an error message, 
-	// and return false to prevent redirection of the page to the "successful registration page"
-	if (!(validDescription() && validTestDate() && validTFR())) {
-		alert("Please fix any errors in your provided information before the new data can be added.");
-		return false;
-	// If the field verification functions have all returned true, the user's input is valid and we allow him to proceed to the "successful registration page"
-	} else {
-		return true;
-	}
-}
 
 function validPatientInfo() {
 	if (!(validFirstName() && validLastName() && validDOB() && validGender())) {
-		alert("Please fix any errors in your provided information before the new subject can be added.");
+		alert("Please fix any errors in your provided information before the new patient can be added.");
 		return false;
 	} else {
 		return true;

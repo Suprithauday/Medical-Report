@@ -1,5 +1,4 @@
 <?php
-include("operations.php");
 session_start();
 ?>
 
@@ -8,7 +7,102 @@ session_start();
 <head>
     <meta http-equiv="Content-Type" charset=utf-8" />
     <link rel="stylesheet" href="style.css">
-    <script src="FormVerify.js"></script>
+    <script>
+
+        // function validRoutine() {
+        //     var routine = document.getElementById('RoutineDiet');
+        //     console.log("routine is " + routine.value);
+        //     if (routine.value === 'Morning' || routine.value === 'Afternoon' || routine.value === 'night') {
+        //         document.getElementById('RoutineDietError').innerHTML = '';
+        //         return true;
+        //     } else {
+        //         document.getElementById('RoutineDietError').innerHTML = 'Please make a choice for Male or Female.';
+        //         document.getElementById('RoutineDietError').style.color = 'red';
+        //         return false;
+        //     }
+        // }
+        // function validMedRoutine() {
+        //     var Medroutine = document.getElementById('RoutineMed');
+        //     console.log("Medroutine is " + Medroutine.value);
+        //     if (Medroutine.value === 'Morning' || Medroutine.value === 'Afternoon' || Medroutine.value === 'night') {
+        //         document.getElementById('RoutineMedError').innerHTML = '';
+        //         return true;
+        //     } else {
+        //         document.getElementById('RoutineMedError').innerHTML = 'Please make a choice for Male or Female.';
+        //         document.getElementById('RoutineMedError').style.color = 'red';
+        //         return false;
+        //     }
+        // }
+        function validPat()
+        {
+            var pat = document.getElementById('patients');
+            console.log("pat is "+pat.value);
+            if (pat.value === "")
+            {
+                document.getElementById('patients').innerHTML = '';
+                return true;
+            } else {
+                document.getElementById('patients').innerHTML = 'Please make a choice.';
+                document.getElementById('patients').style.color = 'red';
+                return false;
+            }
+        }
+        function validDate()
+        {
+            var date = document.getElementById('DietDate');
+            console.log("date is "+date.value);
+            if (date.value === "null")
+            {
+                document.getElementById('DietDate').innerHTML = 'null';
+                return true;
+            } else {
+                document.getElementById('DietDate').innerHTML = 'Please make a choice.';
+                document.getElementById('DietDate').style.color = 'red';
+                return false;
+            }
+        }
+
+        function validMedDate()
+        {
+            var Meddate = document.getElementById('MedicationDate');
+            console.log("Meddate is "+Meddate.value);
+            if (Meddate.value === "")
+            {
+                document.getElementById('MedicationDate').innerHTML = '';
+                return true;
+            } else {
+                document.getElementById('MedicationDate').innerHTML = 'Please make a choice.';
+                document.getElementById('MedicationDate').style.color = 'red';
+                return false;
+            }
+        }
+
+        function validDispenseform() {
+            console.log('check')
+            if (!(validPat()  && validDate() && validMedDate())){
+                alert("Please fix any errors ");
+                return false;
+            } else {
+                return true;
+            }
+        }
+        // function ValidLoginInfo()
+        // {
+        //     var empt = document.forms["Dform"].value;
+        //     if (empt == null)
+        //     {
+        //         alert("Please input a Value");
+        //         return false;
+        //     }
+        //     else
+        //     {
+        //         alert('Already entered');
+        //         return true;
+        //     }
+        // }
+
+    </script>
+
     <title>BIOM 9450: A Web-Based Medication and Diet Regime Management System </title>
 </head>
 <body>
@@ -24,9 +118,9 @@ $conn = odbc_connect("project","","");
 
     $query = "SELECT * FROM Patients";
     $patients = odbc_exec($conn,$query);
-        $html = ' <form method = "POST" action="DispenseMed.php"> 
+        $html = ' <form name="Dform" method="POST" onsubmit="return validDispenseform()" action="DispenseMed.php"> 
                     <h4> Select a Patient: </h4> 
-                    <select id="patients" name="patients" >
+                    <select id="patients" name="patients" onchange="ValidPat()">
                         <option value="">Please select an option</option>';
     while(odbc_fetch_row($patients)) {
             $firstName = odbc_result($patients,"FirstName");
@@ -34,28 +128,27 @@ $conn = odbc_connect("project","","");
             $patientID = odbc_result($patients,"Patient_ID");
         $html .= '<option value='.$patientID.'>'.$firstName.' '.$lastName.'</option>';
         }
-
 $html .= '</select>
   <label for="RoutineDiet"></label>
   <p>Choose a Diet Routine:</p>
-  <select name="DietRoutine" id="RoutineDiet">
+  <select name="DietRoutine" id="RoutineDiet" onchange="ValidRoutine()">
   <option value="Morning">Morning</option>
   <option value="Afternoon">Afternoon</option>
   <option value="night">Night</option>
 </select>
   <label for="DietDate"></label>
   <p>Diet Date:</p>
-  <input type="date" id="Dietdate" name="Dietdate">
+  <input type="date" id="DietDate" name="DietDate" onchange="ValidDate()">
 
 <label for="Routine"><p>Choose a Medication Routine:</p></label>
-<select name="MedicationRoutine" id="Routine">
+<select name="MedicationRoutine" id="Routine" onchange="ValidMedRoutine()">
   <option value="Morning">Morning</option>
   <option value="Afternoon">Afternoon</option>
   <option value="night">Night</option>
 </select>
 
   <label for="MedicationDate"><p>Medication Date:</p></label>
-  <input type="date" id="Medicationdate" name="Medicationdate">
+  <input type="date" id="MedicationDate" name="MedicationDate" onchange="ValidMedDate()">
   <input type="submit" name="submit">
 </form>';
  echo $html;
@@ -65,8 +158,8 @@ $html .= '</select>
      $patientID=$_POST['patients'];
      $Routine = $_POST['MedicationRoutine'];
      $RoutineDiet = $_POST['DietRoutine'];
-     $MedicationDate = date_format(date_create($_POST['Medicationdate']),"d/m/Y");
-     $DietDate = date_format(date_create($_POST['Dietdate']),"d/m/Y");
+     $MedicationDate = date_format(date_create($_POST['MedicationDate']),"d/m/Y");
+     $DietDate = date_format(date_create($_POST['DietDate']),"d/m/Y");
      $_SESSION["patient_id"] = $patientID;
      $_SESSION["routine"] = $Routine;
      $_SESSION["date"] = $MedicationDate;

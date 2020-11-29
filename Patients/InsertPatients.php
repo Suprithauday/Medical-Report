@@ -1,5 +1,18 @@
 <!--Establish a Session-->
 <?php
+include("../operations.php");
+session_start();
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" charset=utf-8" />
+    <link rel="stylesheet" href="../style.css">
+    <script src="../FormVerify.js"></script>
+
+    <title>BIOM 9450: A Web-Based Medication and Diet Regime Management System </title>
+</head>
+<?php
 	if(session_id() == '') {
 		session_start();
 	}
