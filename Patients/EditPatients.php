@@ -47,7 +47,7 @@ if (isset($_SESSION['userName'])) {
 					<td id=\"genderError\"></td>
 				</tr>
 				<tr>
-					<td><input type=\"submit\" id=\"submit\" value=\"Edit\"/></td>
+					<td><input type=\"submit\" id=\"submit\" value=\"Save\"/></td>
 				</tr>
 			</table>
 		</form>";

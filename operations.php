@@ -109,16 +109,18 @@ function displayPatients($conn, $isAdmin, $pracID, $searchTerms)
 					<td>$gender</td>
 			
 					<td><form id=\"editPatient\" method=\"POST\" action=\"../editForm.php\">
-							<input type=\"submit\" id=\"editPatientSubmit\" value=\"EDIT\"/>	
-					<td><form id=\"editPatient\" method=\"POST\" action=\"../Practitioner/report.php\">	
-							<input type=\"submit\" id=\"ViewPatientsSubmit\" value=\"ViewReport\"/></form></td>
+							<input type=\"submit\" id=\"editPatientSubmit\" value=\"EDIT\"/>
 							<input type=\"hidden\" id=\"formType\" name=\"formType\" value=\"patient\"/>
 							<input type=\"hidden\" id=\"patientID\" name=\"patientID\" value=\"$patientID\"/>
 							<input type=\"hidden\" id=\"firstName\" name=\"firstName\" value=\"$firstName\"/>
 							<input type=\"hidden\" id=\"lastName\" name=\"lastName\" value=\"$lastName\"/>
 							<input type=\"hidden\" id=\"birthDate\" name=\"birthDate\" value=\"$birthDate\"/>
 							<input type=\"hidden\" id=\"gender\" name=\"gender\" value=\"$gender\"/>
-						</form></td>
+                    </form></td>
+					<td><form id=\"editPatient\" method=\"POST\" action=\"../Practitioner/report.php\">	
+							<input type=\"submit\" id=\"ViewPatientsSubmit\" value=\"ViewReport\"/>
+                        </form>
+                    </td>
 				  </tr>";
         }
         echo "</table>";
@@ -232,7 +234,7 @@ function displayPractitioners($conn, $isAdmin, $searchTerms)
 					<td>$password</td>
 					<td>$administratorString</td>
 					<td><form id=\"editPractitioner\" method=\"POST\" action=\"../editForm.php\">
-							<input type=\"submit\" id=\"editPractitionerSubmit\" value=\"Edit\"/></td>
+							<input type=\"submit\" id=\"editPractitionerSubmit\" value=\"Edit\"/>
 							<input type=\"hidden\" id=\"formType\" name=\"formType\" value=\"practitioner\"/>
 							<input type=\"hidden\" id=\"pracID\" name=\"pracID\" value=\"$pracID\"/>
 							<input type=\"hidden\" id=\"firstName\" name=\"firstName\" value=\"$firstName\"/>
