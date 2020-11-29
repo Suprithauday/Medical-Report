@@ -1,5 +1,4 @@
 <?php
-include("operations.php");
 session_start();
 ?>
     <!DOCTYPE html>
@@ -7,14 +6,77 @@ session_start();
     <head>
         <meta http-equiv="Content-Type" charset=utf-8" />
         <link rel="stylesheet" href="style.css">
-        <script src="FormVerify.js"></script>
+        <script>
+            function ValidMedication()
+            {
+                var Med = document.getElementById('Medications');
+                if (Med.value !== "")
+                {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            function MedStatus()
+            {
+                var MedSta = document.getElementById('MedicationStatus');
+                if (MedSta.value !== "")
+                {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            function Diet()
+            {
+                var Dieta = document.getElementById('Diet');
+                if (Dieta.value !== "")
+                {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+            function DietStatus()
+            {
+                var DietStatus = document.getElementById('DietStatus');
+                if (DietStatus.value !== "")
+                {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
 
+            function ValidEditDispenseformMed() {
+                console.log(ValidMedication())
+                console.log(MedStatus())
+                if (!(ValidMedication()  && MedStatus()))
+                {
+                    alert("Please fix any errors ");
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            function ValidEditDispenseformDiet() {
+                if (!(DietStatus() && Diet()))
+            {
+                alert("Please fix any errors ");
+                return false;
+            } else {
+                return true;
+            }
+            }
+
+            </script>
         <title>BIOM 9450: A Web-Based Medication and Diet Regime Management System </title>
     </head>
 <body>
-<form id="logout" method="POST" action="./index.php">
+<form id="logout" method="POST"  action="./index.php">
     <input type="submit" id="logoutSubmit" value="Log Out"/>
 </form>
+
 <form id="backToControlPanel" method="POST" action="./controls/controls.php">
     <input type="submit" id="backToControlsSubmit" value="Back"/>
 </form>
@@ -29,9 +91,9 @@ $query = "SELECT * FROM MedRegime";
 $medication = odbc_exec($conn,$query);
 $query2 = "SELECT * FROM DietRegime";
 $Diet = odbc_exec($conn,$query2);
-$html = '<form method = "POST" action="EditDispense.php"> 
+$html = '<form method="POST" onsubmit="return ValidEditDispenseformMed()" action="EditDispense.php"> 
                     <p> Select a Medication: </p> 
-                    <select id="Medications" name="Medication" >
+                    <select id="Medications" name="Medication" onchange="ValidMedication()">
                         <option value="">Please select an option</option>';
 while(odbc_fetch_row($medication)) {
     $med = odbc_result($medication,"Medication");
@@ -41,21 +103,21 @@ while(odbc_fetch_row($medication)) {
 }
 
 $html .= '</select>
-    <select id="MedicationStatus" name="MedicationStatus">
+    <select id="MedicationStatus" name="MedicationStatus" onchange="MedStatus()">
     <option value="">status</option>
-                        <option value="">given</option>
-                        <option value="">no stock</option>
-                          <option value="">fasting</option>
-                            <option value="">refused</option>
-                            <option value="">Ceased</option>
+                        <option value="given">given</option>
+                        <option value="nostock">no stock</option>
+                          <option value="fasting">fasting</option>
+                            <option value="refused">refused</option>
+                            <option value="ceased">Ceased</option>
     </select>
  <input type="submit" name="SubmitMedication">
 </form>';
 echo $html;
 
-$htm = '<form method = "POST" action="EditDispense.php"> 
+$htm = '<form method = "POST" onsubmit="return ValidEditDispenseformDiet()" action="EditDispense.php"> 
                     <p> Select a Diet Regime: </p> 
-                    <select id="Diet" name="Diet" >
+                    <select id="Diet" name="Diet" onchange="Diet()">
                         <option value="">Please select an option</option>';
 
 while(odbc_fetch_row($Diet)) {
@@ -66,13 +128,13 @@ while(odbc_fetch_row($Diet)) {
 }
 
 $htm.= '</select>
-<select id="DietStatus" name="DietStatus">
+<select id="DietStatus" name="DietStatus" onchange="DietStatus()">
 <option value="">status</option>
-                        <option value="">given</option>
-                        <option value="">no stock</option>
-                          <option value="">fasting</option>
-                            <option value="">refused</option>
-                            <option value="">Ceased</option>
+                      <option value="given">given</option>
+                        <option value="nostock">no stock</option>
+                          <option value="fasting">fasting</option>
+                            <option value="refused">refused</option>
+                            <option value="ceased">Ceased</option>
  <input type="submit" name="SubmitDiet">
 </form>';
 echo $htm;
@@ -94,7 +156,7 @@ if (isset($_POST['SubmitMedication'])) {
 //Diet Regime
 if (isset($_POST['SubmitDiet'])) {
     $Diet = $_POST['Diet'];
-    $patientID = $_SESSION['patient_id'];
+    $patientID = $_SESSION['patient_ID'];
     $DietStatus = $_POST['DietStatus'];
     $RoutineDiet = $_SESSION['DietRoutine'];
     $Date = $_SESSION['DietDate'];
