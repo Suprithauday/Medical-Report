@@ -14,7 +14,7 @@ session_start();
         {
             var pat = document.getElementById('patients');
             console.log("pat is "+pat.value);
-            if (!pat.value === "")
+            if (pat.value !== "")
             {
                 return true;
             } else {
@@ -25,7 +25,7 @@ session_start();
         {
             var date = document.getElementById('DietDate');
             console.log("date is "+date.value);
-            if (date.value === "")
+            if (date.value !== "")
             {
                 return true;
             } else {
@@ -37,7 +37,7 @@ session_start();
         {
             var Meddate = document.getElementById('MedicationDate');
             console.log("Meddate is "+Meddate.value);
-            if (Meddate.value === "")
+            if (Meddate.value !== "")
             {
                 return true;
             } else {
