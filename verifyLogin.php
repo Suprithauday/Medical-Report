@@ -14,6 +14,8 @@
 	<body>
 <!--    establishment of connection-->
 		<?php
+
+            error_reporting(E_ERROR | E_PARSE);  // Disable ODBC Warnings
 			$conn = openConnection();
 
 			$userName = $_POST['userName'];

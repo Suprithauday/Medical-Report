@@ -21,7 +21,7 @@ session_start();
 		echo '<h3>Insert Patients</h3>
 		<h4>Please enter the details of the patient you would like to insert.</h4>
 
-		<form id="patientForm" onSubmit="return validPatientInfo()" method="POST" action="../Patients/AddPatients.php">
+		<form id="patientForm" onSubmit="return validPatientInfo()" method="POST" action="AddPatients.php">
 			<table class="form-table">
 		        <tr>
 		            <td>First Name:</td>

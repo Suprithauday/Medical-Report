@@ -4,18 +4,18 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link rel="stylesheet" href="style.css">
 		<script src="FormVerify.js"></script>
-		<?php 
-			include("operations.php");
-			session_start();
-			$formType = $_POST['formType'];
-		if ($formType == "patient") {
-			echo "<title>Insert Patients</title>";
-		} else if ($formType == "relationship") {
-			echo "<title>Insert Relationships</title>";
-		} else if ($formType == "practitioner") {
-			echo "<title>Insert Practitioners</title>";
-		}
-		?>
+		<?php
+        include("operations.php");
+        session_start();
+        $formType = $_POST['formType'];
+        if ($formType == "patient") {
+            echo "<title>Insert Patients</title>";
+        } else if ($formType == "relationship") {
+            echo "<title>Insert Relationships</title>";
+        } else if ($formType == "practitioner") {
+            echo "<title>Insert Practitioners</title>";
+        }
+        ?>
 	</head>
 
 	<body>
