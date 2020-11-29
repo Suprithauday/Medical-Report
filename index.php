@@ -7,7 +7,7 @@ session_destroy();
 ?>
 
 <!DOCTYPE html>
-<html >
+<html>
 	<head>
 		<meta http-equiv="Content-Type" charset=utf-8" />
 		<link rel="stylesheet" href="style.css">

@@ -102,7 +102,9 @@ function displayPatients($conn, $isAdmin, $pracID, $searchTerms)
 					<td>$gender</td>
 			
 					<td><form id=\"editPatient\" method=\"POST\" action=\"../editForm.php\">
-							<input type=\"submit\" id=\"editPatientSubmit\" value=\"Edit\"/></td>
+							<input type=\"submit\" id=\"editPatientSubmit\" value=\"EDIT\"/>	
+					<td><form id=\"editPatient\" method=\"POST\" action=\"../Practitioner/report.php\">	
+							<input type=\"submit\" id=\"ViewPatientsSubmit\" value=\"ViewReport\"/></form></td>
 							<input type=\"hidden\" id=\"formType\" name=\"formType\" value=\"patient\"/>
 							<input type=\"hidden\" id=\"patientID\" name=\"patientID\" value=\"$patientID\"/>
 							<input type=\"hidden\" id=\"firstName\" name=\"firstName\" value=\"$firstName\"/>

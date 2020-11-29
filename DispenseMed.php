@@ -161,7 +161,26 @@ while (odbc_fetch_row($MedRegime)) {
     $routine = odbc_result($MedRegime, "Routine");
     $status = odbc_result($MedRegime, "Status");
     $Medication = odbc_result($MedRegime, "Medication");
-    echo $Patient_ID . ' ' . $Med_ID . ' ' . $date . ' ' . $day . ' ' . $routine . ' ' . $status. ' '.$Medication;
+
+   echo'<table>
+  <tr>
+    <th>Patient ID </th>
+    <th>Med ID</th>
+    <th>Date </th>
+    <th>Routine </th>
+    <th>Status</th>
+    <th>Medication</th>
+  </tr>
+  <tr>
+    <td>$Patient_ID</td>
+    <td>$Med_ID</td>
+    <td>$date</td>
+    <td>$routine</td>
+    <td>$status</td>
+    <td>$Medication</td>
+</tr>
+</table>';
+//    echo $Patient_ID . ' ' . $Med_ID . ' ' . $date . ' ' . $day . ' ' . $routine . ' ' . $status. ' '.$Medication;
 }
 
      while (odbc_fetch_row($DietRegime)) {

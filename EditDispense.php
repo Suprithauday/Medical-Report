@@ -37,6 +37,7 @@ session_start();
                     return false;
                 }
             }
+
             function DietStatus()
             {
                 var DietStatus = document.getElementById('DietStatus');
@@ -59,14 +60,18 @@ session_start();
                     return true;
                 }
             }
+
             function ValidEditDispenseformDiet() {
                 if (!(DietStatus() && Diet()))
             {
                 alert("Please fix any errors ");
                 return false;
-            } else {
+            } else  {
                 return true;
             }
+                // else (DietStatus()==="refused"){
+                //     window.open('mailto:test@example.com');
+                // }
             }
 
             </script>
@@ -142,7 +147,7 @@ echo $htm;
 if (isset($_POST['SubmitMedication'])) {
     $medication = $_POST['Medication'];
     $MedicationStatus = $_POST['MedicationStatus'];
-    $patientID = $_SESSION['patient_id'];
+    $patientID = $_SESSION['patient_ID'];
     $Routine = $_SESSION['routine'];
     $Date = $_SESSION['date'];
     $query1 = "UPDATE PatMedCon SET Med_ID = $medication && Status='$MedicationStatus'
