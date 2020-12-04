@@ -1,6 +1,5 @@
 <!--Establish a Session-->
 <?php
-include("../operations.php");
 session_start();
 ?>
 <!DOCTYPE html>

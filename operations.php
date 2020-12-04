@@ -1,6 +1,6 @@
 <!--this is my operations page where all the functions are written and called when necessary-->
 <?php
-error_reporting(E_ERROR | E_PARSE);  // Disable ODBC Warnings
+//error_reporting(E_ERROR | E_PARSE);  // Disable ODBC Warnings
 function openConnection()
 {
     return odbc_connect("project", '', '');
@@ -184,7 +184,6 @@ function displayConnections($conn, $isAdmin, $searchTerms)
     }
 }
 
-
 function displayPractitioners($conn, $isAdmin, $searchTerms)
 {
     if ($searchTerms == '') {
@@ -212,6 +211,7 @@ function displayPractitioners($conn, $isAdmin, $searchTerms)
 				<th>Password</th>
 				<th>Administrator?</th>
 			</tr>";
+
         while (odbc_fetch_row($practitioners)) {
             $pracID = odbc_result($practitioners, "Prac_ID");
             $firstName = odbc_result($practitioners, "FirstName");
@@ -357,5 +357,4 @@ function printPatientOptions($conn)
         }
     }
 }
-
 ?>

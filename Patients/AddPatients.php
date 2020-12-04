@@ -26,7 +26,7 @@
 <!--establish a connection with the database-->
 
 <?php
-error_reporting(E_ERROR | E_PARSE);  // Disable ODBC Warnings
+//error_reporting(E_ERROR | E_PARSE);  // Disable ODBC Warnings
 if (isset($_SESSION['userName'])) {
     $conn = openConnection();
     $firstName = $_POST['firstName'];
@@ -46,7 +46,7 @@ if (isset($_SESSION['userName'])) {
         $result = odbc_exec($conn, $sqlQuery) or die("Server Error");
         if (!odbc_error()) {
             $pracID = $_SESSION['pracID'];
-            $sqlQuery = "INSERT INTO Connectionss (Prac_ID, Patient_ID) VALUES ('$pracID', '$patientID')";
+            $sqlQuery = "INSERT INTO Connections (Prac_ID, Patient_ID) VALUES ('$pracID', '$patientID')";
             $result = odbc_exec($conn, $sqlQuery);
             if (odbc_error()) {
                 odbc_exec($conn, "DELETE FROM Patients where Patient_ID=$patientID");

@@ -1,10 +1,11 @@
+
 <?php
 session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Medical Report</title>
+    <title>Medical Report</title>2
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
@@ -85,8 +86,8 @@ session_start();
 
         /*Patient Image */
         img {
-            width:400px;
-            height:400px;
+            width:200px;
+            height:200px;
         }
 
         @media screen and (max-width: 700px) {
@@ -123,7 +124,6 @@ session_start();
             color: white;
         }
         .button{
-            display: inline-block;
             text-decoration: none;
             color: #FFF;
             width: 20px;
@@ -134,8 +134,8 @@ session_start();
             vertical-align: middle;
             overflow: hidden;
             transition: .4s;
+            display: block;
         }
-
 
         .button1 {border-radius: 80%;background-color: greenyellow}
         .button2 {border-radius: 80%;background-color: red}
@@ -143,19 +143,78 @@ session_start();
         .button4 {border-radius: 80%;background-color: pink}
         .button5 {border-radius: 80%;background-color: deepskyblue}
 
+        .legend-scale ul {
+            margin: 0;
+            margin-bottom: 5px;
+            padding: 0;
+            float: left;
+            list-style: none;
+        }
+        .legend-scale ul li {
+            font-size: 80%;
+            list-style: none;
+            margin-left: 0;
+            line-height: 18px;
+            margin-bottom: 2px;
+        }
+        ul.legend-labels li span {
+            display: block;
+            float: left;
+            height: 16px;
+            width: 30px;
+            margin-right: 5px;
+            margin-left: 0;
+            border: 1px solid #999;
+        }
 
     </style>
 </head>
 <body>
+<?php
+$conn = odbc_connect("project", "", "");
+if()
+$patientID = $_POST['patients'];
+$Routine = $_POST['MedicationRoutine'];
+$RoutineDiet = $_POST['RoutineDiet'];
+$DietDate = $_POST['DietDate'];
+$MedicationDate = $_POST['MedicationDate'];
+$_SESSION["date"] = $MedicationDate;
+$_SESSION["DietDate"] = $DietDate;
+$_SESSION["patient_ID"] = $patientID;
+$_SESSION["routine"] = $Routine;
+$_SESSION["DietRoutine"] = $RoutineDiet;
 
+$patientQuery = "SELECT * FROM Patients WHERE Patient_ID=$patientID";
+
+$patient = odbc_exec($conn, $patientQuery);
+echo '$patient';
+$Q1 = "SELECT * FROM PatMedCon,MedRegime,Patients
+                        WHERE PatMedCon.Patient_ID=Patients.Patient_ID
+                        AND PatMedCon.Med_ID=MedRegime.Med_ID
+                        AND Patients.Patient_ID=$patientID;
+                        AND PatMedCon.Date=#$MedicationDate#";
+$Q2 = "SELECT * FROM PatDietCon,DietRegime,Patients 
+                        WHERE PatDietCon.Patient_ID=Patients.Patient_ID
+                        AND PatDietCon.Diet_ID=DietRegime.Diet_ID
+                        AND Patients.Patient_ID=$patientID
+                        AND PatDietCon.Date=#$DietDate#";
+$patient = odbc_exec($conn, $patientQuery);
+$MedRegime = odbc_exec($conn, $Q1);
+$DietRegime = odbc_exec($conn, $Q2);
+echo "$patient";
+?>
     <div class="header">
     <h1>Medical Report</h1>
     </div>
-
     <div class="navbar">
-    <a href="#" class="active">Blah Blah</a>
-    <a href="#">Med Summary Report</a>
-    <a href="#">Diet Summary Report</a>
+<!--        <form action="MedReport.php" method="post">-->
+<!--            <input type="text" name="MedReport"><br>-->
+<!--            <input type="text" name="DietReport"><br>-->
+<!--            <input type="submit">-->
+<!--        </form>-->
+    <a href="#" class="active">Home</a>
+        <a href="MedReport.php">Patients Medication Report</a></div>
+<!--    <a href="DietReport.php">Patient Diet Report</a>-->
     </div>
 
     <div class="row">
@@ -163,53 +222,56 @@ session_start();
     <h2>Patient Info</h2>
     <h5>Patient Name:</h5>
 
-        <img src="../Patients/aged_man.jpg" height="400" width="800">
-        <h3>random info </h3>
+        <img src="../Patients/aged_man.jpg" height="250" width="500">
+        <h3>The patient has been suffering from Diabetics. </h3>
     </div>
         <div class="main">
-    <h2>TITLE HEADING</h2>
-    <h5>Description, Nov 29,2020</h5>
-    <p>Some text..</p>
-    <p>Introduction</p> <br>
+    <h2>Patient Brief</h2>
+    <h5>Date:</h5>
+        <h3>Brief Summary Sheet</h3>
+        <table id="t01">
+            <tr>
+                <th>Medication Name</th>
+                <th>Dosage</th>
+                <th>Round</th>
+                <th>30th Nov</th>
+                <th>01st Dec</th>
+                <th>02nd Dec</th>
+                <th>03rd Dec</th>
+                <th>04th Dec</th>
+                <th>05th Dec</th>
+                <th>06th Dec</th>
+            </tr>
+            <tr>
+                <td>Betalog 50 mg</td>
+                <td>2</td>
+                <td>13:00</td>
+                <td><button class="button button1">G</button></td>
+                <td><button class="button button2">N</button></td>
+                <td><button class="button button1">G</button></td>
+                <td><button class="button button1">G</button></td>
+                <td><button class="button button1">G</button></td>
+                <td><button class="button button1">G</button></td>
+                <td><button class="button button1">G</button></td>
+            </tr>
 
-            <h2>Summary Sheet</h2>
+        </table><br>
 
-            <table id="t01">
-                <tr>
-                    <th>Medication Name</th>
-                    <th>Dosage</th>
-                    <th>Round</th>
-                    <th>30th Nov</th>
-                    <th>01st Dec</th>
-                    <th>02nd Dec</th>
-                    <th>03rd Dec</th>
-                    <th>04th Dec</th>
-                    <th>05th Dec</th>
-                    <th>06th Dec</th>
-                </tr>
-                <tr>
-                    <td>Betalog 50 mg</td>
-                    <td>2</td>
-                    <td>13:00</td>
-                    <td><button class="button button1">G</button></td>
-                    <td><button class="button button2">N</button></td>
-                    <td><button class="button button1">G</button></td>
-                    <td><button class="button button1">G</button></td>
-                    <td><button class="button button1">G</button></td>
-                    <td><button class="button button1">G</button></td>
-                    <td><button class="button button1">G</button></td>
-
-                </tr>
-
-            </table>
-            <button class="button button1">G</button>
-            <button class="button button2">N</button>
-            <button class="button button3">O</button>
-            <button class="button button4">M</button>
-            <button class="button button5">F</button>
-
+<ul>
+   <span><button class="button button1">G</button>
+    <button class="button button2">N</button>
+        <button class="button button3">O</button>
+        <button class="button button4">M</button>
+       <button class="button button5">F</button></span>
+</ul>
     </div>
     </div>
+    <p><center> To know more, click on the tabs. </center></p>
+
+
+
+
+
 </body>
 </html>
 

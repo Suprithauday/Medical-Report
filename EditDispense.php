@@ -75,7 +75,7 @@ session_start();
     <input type="submit" id="backToControlsSubmit" value="Back"/>
 </form>
 <?php
-error_reporting(E_ERROR | E_PARSE);  // Disable ODBC Warnings
+//error_reporting(E_ERROR | E_PARSE);  // Disable ODBC Warnings
 if (session_id() == '') {
     session_start();
 }
@@ -145,22 +145,28 @@ if (!($patientID && $Routine && $Date && $RoutineDiet && $DietDate && $patientNa
 if (isset($_POST['SubmitMedication'])) {
     $medication = $_POST['Medication'];
     $MedicationStatus = $_POST['MedicationStatus'];
-    $query1 = "UPDATE PatMedCon SET Med_ID = $medication && Status='$MedicationStatus'
+    $query1 = "UPDATE PatMedCon SET Med_ID = $medication, Status='$MedicationStatus'
                 WHERE Patient_ID = $patientID
                 AND Routine = '$Routine'
                 AND Date = #$Date#";
     $Medication = odbc_exec($conn, $query1) or die("Server Error. Failed to Update.");
+    if(!odbc_error()){
+        echo "Medication has been updated successfully";
+    }
 }
 
 //Diet Regime
 if (isset($_POST['SubmitDiet'])) {
     $Diet = $_POST['Diet'];
     $DietStatus = $_POST['DietStatus'];
-    $query3 = "UPDATE PatDietCon SET Diet_ID = $Diet && Status = '$DietStatus'
+    $query3 = "UPDATE PatDietCon SET Diet_ID = $Diet, Status = '$DietStatus'
                 WHERE Patient_ID = $patientID
                 AND Routine = '$RoutineDiet'
                 AND Date = #$DietDate#";
     $Diet = odbc_exec($conn, $query3) or die("Server Error. Failed to Update.");
+    if(!odbc_error()){
+        echo "Diet Regime has been updated successfully";
+    }
 }
 
 ?>
