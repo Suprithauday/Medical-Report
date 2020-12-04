@@ -19,7 +19,7 @@ session_start();
         }
 
         .header {
-            padding: 20px;
+            padding: 25px;
             text-align: center;
             background: #000000;
             color: white;
@@ -29,59 +29,26 @@ session_start();
         .header h1 {
             font-size: 40px;}
 
-        .navbar {
-            overflow: hidden;
-            background-color: #333;
-            position: sticky;
-            position: -webkit-sticky;
-            top: 0;
-        }
-
-        /* Style the navigation bar links */
-        .navbar a {
-            float: left;
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 20px;
-            text-decoration: none;
-        }
-
-
-        /* Change color on hover */
-        .navbar a:hover {
-            background-color: #ddd;
-            color: black;
-        }
-
-        /* Active/current link */
-        .navbar a.active {
-            background-color: #666;
-            color: white;
-        }
-
         /* Column container */
         .row {
             display: -ms-flexbox; /* IE10 */
             display: flex;
-            -ms-flex-wrap: wrap; /* IE10 */
-            flex-wrap: wrap;
         }
 
         /* Sidebar/left column */
         .side {
-            -ms-flex: 30%;
-            flex: 30%;
+            -ms-flex: 20%;
+            flex: 20%;
             background-color: #f1f1f1;
             padding: 20px;
         }
 
         /* Main column */
         .main {
-            -ms-flex: 70%; /* IE10 */
-            flex: 70%;
+            -ms-flex: 100%; /* IE10 */
+            flex: 100%;
             background-color: white;
-            padding: 20px;
+            padding: 30px;
         }
 
         /*Patient Image */
@@ -90,18 +57,12 @@ session_start();
             height:200px;
         }
 
-        @media screen and (max-width: 700px) {
+        @media screen and (max-width: 900px) {
             .row {
                 flex-direction: column;
             }
         }
 
-        @media screen and (max-width: 400px) {
-            .navbar a {
-                float: none;
-                width: 100%;
-            }
-        }
         table {
             width:100%;
         }
@@ -123,155 +84,198 @@ session_start();
             background-color: black;
             color: white;
         }
-        .button{
-            text-decoration: none;
-            color: #FFF;
-            width: 20px;
-            height: 20px;
-            line-height: 120px;
-            border-radius: 50%;
-            text-align: center;
-            vertical-align: middle;
-            overflow: hidden;
-            transition: .4s;
-            display: block;
-        }
 
-        .button1 {border-radius: 80%;background-color: greenyellow}
-        .button2 {border-radius: 80%;background-color: red}
-        .button3 {border-radius: 80%;background-color: gray}
-        .button4 {border-radius: 80%;background-color: pink}
-        .button5 {border-radius: 80%;background-color: deepskyblue}
-
-        .legend-scale ul {
-            margin: 0;
-            margin-bottom: 5px;
-            padding: 0;
-            float: left;
-            list-style: none;
-        }
-        .legend-scale ul li {
-            font-size: 80%;
-            list-style: none;
-            margin-left: 0;
-            line-height: 18px;
-            margin-bottom: 2px;
-        }
-        ul.legend-labels li span {
-            display: block;
-            float: left;
-            height: 16px;
-            width: 30px;
-            margin-right: 5px;
-            margin-left: 0;
-            border: 1px solid #999;
-        }
 
     </style>
 </head>
 <body>
+
 <?php
 $conn = odbc_connect("project", "", "");
-if()
-$patientID = $_POST['patients'];
-$Routine = $_POST['MedicationRoutine'];
-$RoutineDiet = $_POST['RoutineDiet'];
-$DietDate = $_POST['DietDate'];
-$MedicationDate = $_POST['MedicationDate'];
-$_SESSION["date"] = $MedicationDate;
-$_SESSION["DietDate"] = $DietDate;
-$_SESSION["patient_ID"] = $patientID;
-$_SESSION["routine"] = $Routine;
-$_SESSION["DietRoutine"] = $RoutineDiet;
+if(isset($_POST['ViewReport'])) {
 
-$patientQuery = "SELECT * FROM Patients WHERE Patient_ID=$patientID";
+    $patientID = $_POST['patient_ID'];
+    $_SESSION["patient_ID"] = $patientID;
+    $patientQuery = "SELECT * FROM Patients WHERE Patient_ID=$patientID";
+    $patient = odbc_exec($conn, $patientQuery);
 
-$patient = odbc_exec($conn, $patientQuery);
-echo '$patient';
-$Q1 = "SELECT * FROM PatMedCon,MedRegime,Patients
+    //page 1
+    $start_date = date_format(date_sub(date_create(),date_interval_create_from_date_string('8 days')), "Y-m-d");
+    $end_date = date_format(date_sub(date_create(),date_interval_create_from_date_string('1 day')), "Y-m-d");;
+    //page 2
+    $start_date2 = date_format(date_create(), "Y-m-d");
+    $end_date2 = date_format(date_add(date_create(),date_interval_create_from_date_string('7 days')), "Y-m-d");
+
+    $Q1 = "SELECT * FROM PatMedCon,MedRegime,Patients
                         WHERE PatMedCon.Patient_ID=Patients.Patient_ID
                         AND PatMedCon.Med_ID=MedRegime.Med_ID
-                        AND Patients.Patient_ID=$patientID;
-                        AND PatMedCon.Date=#$MedicationDate#";
-$Q2 = "SELECT * FROM PatDietCon,DietRegime,Patients 
+                        AND Patients.Patient_ID=$patientID
+                        AND PatMedCon.Date between #$start_date# and #$end_date#";
+
+    $Q2 = "SELECT * FROM PatMedCon,MedRegime,Patients
+                        WHERE PatMedCon.Patient_ID=Patients.Patient_ID
+                        AND PatMedCon.Med_ID=MedRegime.Med_ID
+                        AND Patients.Patient_ID=$patientID
+                        AND PatMedCon.Date between #$start_date2# and #$end_date2#";
+    $Q3 = "SELECT * FROM PatDietCon,DietRegime,Patients
                         WHERE PatDietCon.Patient_ID=Patients.Patient_ID
                         AND PatDietCon.Diet_ID=DietRegime.Diet_ID
                         AND Patients.Patient_ID=$patientID
-                        AND PatDietCon.Date=#$DietDate#";
-$patient = odbc_exec($conn, $patientQuery);
-$MedRegime = odbc_exec($conn, $Q1);
-$DietRegime = odbc_exec($conn, $Q2);
-echo "$patient";
-?>
-    <div class="header">
-    <h1>Medical Report</h1>
-    </div>
-    <div class="navbar">
-<!--        <form action="MedReport.php" method="post">-->
-<!--            <input type="text" name="MedReport"><br>-->
-<!--            <input type="text" name="DietReport"><br>-->
-<!--            <input type="submit">-->
-<!--        </form>-->
-    <a href="#" class="active">Home</a>
-        <a href="MedReport.php">Patients Medication Report</a></div>
-<!--    <a href="DietReport.php">Patient Diet Report</a>-->
-    </div>
+                        AND PatDietCon.Date between #$start_date# and #$end_date#";
+    $Q4 = "SELECT * FROM PatDietCon,DietRegime,Patients
+                        WHERE PatDietCon.Patient_ID=Patients.Patient_ID
+                        AND PatDietCon.Diet_ID=DietRegime.Diet_ID
+                        AND Patients.Patient_ID=$patientID
+                        AND PatDietCon.Date between #$start_date2# and #$end_date2#";
 
+    $patient = odbc_exec($conn, $patientQuery);
+    $patient_name = '';
+    $patient_image = '';
+    while(odbc_fetch_row($patient)){
+        $patient_name = odbc_result($patient, "FirstName").' '.odbc_result($patient, "LastName");
+        $patient_image = odbc_result($patient, "ProfilePhoto");
+
+        $patient_bday = date_format(date_create_from_format('Y-m-d h:i:s',odbc_result($patient, "BirthDate")), "d/m/Y" );
+        $patient_gender = odbc_result($patient, "Gender");
+        $patient_room = odbc_result($patient, "RoomNumber");
+
+    }
+
+    $MedRegime = odbc_exec($conn, $Q1);
+    $MedRegimeNext = odbc_exec($conn, $Q2);
+    $DietRegime = odbc_exec($conn, $Q3);
+    $DietRegimeNext = odbc_exec($conn, $Q4);
+
+    echo '<div class="header">';
+    echo '<h1>Medical Report</h1>
+    </div>
+   
     <div class="row">
     <div class="side">
-    <h2>Patient Info</h2>
-    <h5>Patient Name:</h5>
+    <h2>Patient Info</h2>';
+    echo '<h2>' . $patient_name . '</h2>';
 
-        <img src="../Patients/aged_man.jpg" height="250" width="500">
-        <h3>The patient has been suffering from Diabetics. </h3>
+    echo ' <img src="'.$patient_image.'" height="250" width="500">
+        <h3>VIP patient.</h3>
+        <p> Date of Birth :'.$patient_bday.'</p>
+        <p>Gender: '.$patient_gender.'</p>
+        <p> Room Number: '.$patient_room.'</p>
+        
     </div>
+    
         <div class="main">
     <h2>Patient Brief</h2>
     <h5>Date:</h5>
         <h3>Brief Summary Sheet</h3>
+        <h3>Medication Details for past week starting from '.$start_date.' and '.$end_date.'</h3>
         <table id="t01">
             <tr>
                 <th>Medication Name</th>
                 <th>Dosage</th>
-                <th>Round</th>
-                <th>30th Nov</th>
-                <th>01st Dec</th>
-                <th>02nd Dec</th>
-                <th>03rd Dec</th>
-                <th>04th Dec</th>
-                <th>05th Dec</th>
-                <th>06th Dec</th>
-            </tr>
+                <th>Date</th>
+                <th>Routine</th>
+                <th>Status</th>
+            </tr>';
+
+        $rows = '';
+        while(odbc_fetch_row($MedRegime)) {
+        $medName = odbc_result($MedRegime,"Medication");
+        $dosage = odbc_result($MedRegime,"Dosage");
+        $date = date_format(date_create_from_format('Y-m-d h:i:s',odbc_result($MedRegime, "Date")), "d/m/Y");
+        $routine = odbc_result($MedRegime, "Routine");
+        $status = odbc_result($MedRegime, "Status");
+
+        $rows .='<tr>
+                <td>'.$medName.'</td>
+                <td>'.$dosage.'</td>
+                <td>'.$date.'</td>
+                <td>'.$routine.'</td>
+                <td>'.$status.'</td>
+            </tr>';
+    }
+
+        echo $rows.'</table><br>';
+        echo '<h3>Medication for next week starting from '.$start_date2.' and '.$end_date2.'</h3>
+        <table id="t01">
             <tr>
-                <td>Betalog 50 mg</td>
-                <td>2</td>
-                <td>13:00</td>
-                <td><button class="button button1">G</button></td>
-                <td><button class="button button2">N</button></td>
-                <td><button class="button button1">G</button></td>
-                <td><button class="button button1">G</button></td>
-                <td><button class="button button1">G</button></td>
-                <td><button class="button button1">G</button></td>
-                <td><button class="button button1">G</button></td>
-            </tr>
+                <th>Medication Name</th>
+                <th>Dosage</th>
+                <th>Date</th>
+                <th>Routine</th>
+                <th>Status</th>
+            </tr>';
+        $rows = '';
 
-        </table><br>
+    while(odbc_fetch_row($MedRegimeNext)) {
+        $medName = odbc_result($MedRegimeNext,"Medication");
+        $dosage = odbc_result($MedRegimeNext,"Dosage");
+        $date = date_format(date_create_from_format('Y-m-d h:i:s',odbc_result($MedRegimeNext, "Date")), "d/m/Y");
+        $routine = odbc_result($MedRegimeNext, "Routine");
+        $status = odbc_result($MedRegimeNext, "Status");
 
-<ul>
-   <span><button class="button button1">G</button>
-    <button class="button button2">N</button>
-        <button class="button button3">O</button>
-        <button class="button button4">M</button>
-       <button class="button button5">F</button></span>
-</ul>
-    </div>
-    </div>
-    <p><center> To know more, click on the tabs. </center></p>
+        $rows .='<tr>
+                <td>'.$medName.'</td>
+                <td>'.$dosage.'</td>
+                <td>'.$date.'</td>
+                <td>'.$routine.'</td>
+                <td>'.$status.'</td>
+            </tr>';
+    }
+        echo $rows.'</table><br>';
+echo '</div>
+    </div>';
 
+    echo'<div class="main">';
+   echo'<h3>Diet Details for past week starting from '.$start_date.' and '.$end_date.'</h3>
+        <table id="t01">
+            <tr>
+                <th>Diet</th>
+                <th>Date</th>
+                <th>Routine</th>
+                <th>Status</th>
+            </tr>';
+    $rows = '';
+    while(odbc_fetch_row($DietRegime)) {
+        $diet = odbc_result($DietRegime,"Description");
+        $date = date_format(date_create_from_format('Y-m-d h:i:s',odbc_result($DietRegime, "Date")), "d/m/Y");
+        $routine = odbc_result($DietRegime, "Routine");
+        $status = odbc_result($DietRegime, "Status");
+        $rows .='<tr>
+               <td>'.$diet.'</td>
+                <td>'.$date.'</td>
+                <td>'.$routine.'</td>
+                <td>'.$status.'</td>
+            </tr>';
+    }
+    echo $rows.'</table><br>';
+    echo '</div>';
+    echo'<div class="main">';
+    echo '<h3>Diet for next week starting from '.$start_date2.' and '.$end_date2.'</h3>
+        <table id="t01">
+            <tr>
+               <th>Diet</th>
+                <th>Date</th>
+                <th>Routine</th>
+                <th>Status</th>
+            </tr>';
+    $rows = '';
+    while(odbc_fetch_row($DietRegimeNext)) {
+        $medName = odbc_result($DietRegimeNext,"Description");
+        $date = date_format(date_create_from_format('Y-m-d h:i:s',odbc_result($DietRegimeNext, "Date")), "d/m/Y");
+        $routine = odbc_result($DietRegimeNext, "Routine");
+        $status = odbc_result($DietRegimeNext, "Status");
 
+        $rows .='<tr>
+                 <td>'.$diet.'</td>
+                <td>'.$date.'</td>
+                <td>'.$routine.'</td>
+                <td>'.$status.'</td>
+            </tr>';
+    }
+    echo $rows.'</table><br>';
+    echo '</div>';
+}
 
-
-
+?>
 </body>
 </html>
-
